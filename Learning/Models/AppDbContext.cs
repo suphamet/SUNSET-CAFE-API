@@ -5,14 +5,20 @@ namespace Learning.Models
 {
     public class AppDbContext : DbContext
     {
-        // บอกว่าเราจะใช้คลาส Product เชื่อมกับตารางใน Database
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<OrderMenu> OrderMenus { get; set; } // ตรวจสอบว่า Class ชื่อ Order
+        public DbSet<DetailOrder> DetailOrders { get; set; } // ตรวจสอบว่า Class ชื่อ DetailOrder
+        public DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // ตรงนี้สำคัญมาก: ให้คุณก๊อปปี้ Path ไฟล์ .db จาก DBeaver มาใส่แทนที่ตรงนี้
-            // ตัวอย่าง: @"Data Source=D:\Test-DB\MyDataBase.db"
             options.UseSqlite(@"Data Source=D:\Test-DB\MyDataBase.db");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderMenu>().ToTable("OrderMenu");
+            modelBuilder.Entity<DetailOrder>().ToTable("DetailOrder");
+            modelBuilder.Entity<Product>().ToTable("Product");
+            modelBuilder.Entity<User>().ToTable("Users");
         }
     }
 }
